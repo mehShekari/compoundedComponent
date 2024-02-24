@@ -1,15 +1,34 @@
-import styled from "styled-components"
+import { createContext, useContext } from "react";
 
-const Wrapper = styled.div`
-    padding: 5px;
-    display: flex;
-    gap: 7px;
-`
-
-export default function TableCompoundActions ({})
+const TableCompoundActionContext = createContext({});
+export const useTableCompoundActionContext = () =>
 {
-    return <Wrapper>
-        <button>add</button>
-        <button>edit</button>
-    </Wrapper>
+    useContext(TableCompoundActionContext);
 }
+
+const TableCompoundActions = ({ children }: { children?: (args: any) => any }) => 
+{
+    return <TableCompoundActionContext.Provider value={{}}>
+        <td>
+            <div className="px-2" style={{ padding: "5px", textAlign: "left" }}>
+                <AddComponent />
+                <EditComponent />
+                {children && children({
+                    addBtn: <AddComponent />
+                })}
+            </div>
+        </td>
+    </TableCompoundActionContext.Provider>
+}
+
+const AddComponent = () =>
+{
+    return <button>add</button>
+}
+
+const EditComponent = () =>
+{
+    return <button>edit</button>
+}
+
+export default TableCompoundActions;
