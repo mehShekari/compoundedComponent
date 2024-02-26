@@ -75,4 +75,11 @@ button:focus-visible {
 .bg-red
 {
   background-color: crimson !important;
+  cursor: pointer;
+  border-radius: 7px !important;
+}
+
+.custom_input
+{
+  background: #333;
 }

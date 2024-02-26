@@ -1,4 +1,4 @@
-const Actions = ({ className }: { className?: string }) =>
+const Actions = ({ className, children }: { className?: string, children?: React.ReactNode }) =>
 {
     return <div>
         <button className={className}>actions</button>

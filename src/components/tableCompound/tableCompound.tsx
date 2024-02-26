@@ -1,67 +1,47 @@
-import React, { useContext, createContext, useState, isValidElement, ReactElement } from "react";
+import React, { useContext, createContext } from "react";
 import TableCompoundBody from "./components/body";
 import TableCompoundFooter from "./components/footer";
 import TableCompoundHeader from "./components/header";
+import useFilterNodeChildren from "../../hooks/useFilterNodeChildren";
 /**
  * * TABLE_COMPOUND 
 */
-const defaultTableCompoundDisplayNames = ['header', 'body', 'footer'];
-const DefaultTableCompoundComponents = [
-    <TableCompoundBody key={"body"} />,
-    <TableCompoundHeader key={"header"} />,
-    <TableCompoundFooter key={"footer"} />,
-]
 
-const TableCompoundContext = createContext({});
+interface IProps {
+    children: React.ReactNode,
+    columns: string[],
+    captions: string[]
+}
+
+type contextPropsType = {
+    columns: string[],
+    captions: string[]
+}
+
+const TableCompoundContext = createContext({} as contextPropsType);
 export function useTableCompoundContext()
 {
     return useContext(TableCompoundContext)
 }
 
-function TableCompound({ children }: { children: React.ReactNode })
+function TableCompound({ children, captions, columns }: IProps)
 {
-    const [tableCom1, setTableCom1] = useState("");
     
-    const getTableTest = (e: string) =>
-    {
-        console.log(e)
-    }
+    const { CustomChildren, FinalChildren } = useFilterNodeChildren({
+        children,
+        checkDisplayName: "compound-table-",
+        defaultsDisplayNames:  ['header', 'body', 'footer'],
+        defaultComponents:  [
+            <TableCompoundHeader key={"header"} />,
+            <TableCompoundBody key={"body"} />,
+            <TableCompoundFooter key={"footer"} />,
+        ]
+    })
 
-    const TableCompoundDefaultComponents = React.Children.toArray(children).filter(_childNode =>{
-        return isValidElement(_childNode) 
-            && (_childNode as any).type.displayName && (_childNode as any).type.displayName.includes("compound-table")
-    }) as ReactElement[];
-    
-    const CustomChildren = React.Children.toArray(children).filter(_childNode =>{
-        return isValidElement(_childNode) 
-            && !(_childNode as any).type.displayName
-    }) as ReactElement[];
-    
-    const FinalChildren: any[] = Array().fill(null, 0, TableCompoundDefaultComponents.length - 1);
-
-
-    const dynamicIf = (_node: any, _index: number) =>
-    {
-        defaultTableCompoundDisplayNames.map((name, _iName) =>
-        {
-            if((_node as any).type.displayName === `compound-table-${name}`)
-            {
-                if (TableCompoundDefaultComponents.length === defaultTableCompoundDisplayNames.length)
-                    FinalChildren[_index] = _node
-                else
-                {
-                    DefaultTableCompoundComponents[_iName] = _node
-                }
-            }
-        })
-    }
-
-    TableCompoundDefaultComponents.forEach(dynamicIf)
-
-    return <TableCompoundContext.Provider value={{ tableCom1, setTableCom1, getTableTest }}>
+    return <TableCompoundContext.Provider value={{ captions, columns }}>
         <table style={{ border: "1px solid #f1f1f1",  borderRadius: "5px", padding: "7px", width: "100%" }}>
             {CustomChildren}
-            {FinalChildren.length > 0 ? FinalChildren : DefaultTableCompoundComponents.map(_node => _node)}
+            {FinalChildren}
         </table>
     </TableCompoundContext.Provider>
 }

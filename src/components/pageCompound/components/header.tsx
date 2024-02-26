@@ -20,9 +20,9 @@ const PageCompoundHeader = ({ children }: { children?: React.ReactNode }) => {
         checkDisplayName: "header-",
         defaultsDisplayNames: ['multiSearch', 'singleSearch', 'actions'],
         defaultComponents: [
-            <Actions key={"actions"} />,
-            <SingleSearch key={"singleSearch"} />,
             <MultiSearch key={"multiSearch"} />,
+            <SingleSearch key={"singleSearch"} />,
+            <Actions key={"actions"} />,
         ]   
     })
 

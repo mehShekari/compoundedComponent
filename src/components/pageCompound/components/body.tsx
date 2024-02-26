@@ -38,7 +38,7 @@ const Body = ({ children }: { children?: React.ReactNode }) =>
         <BodyPageCompoundContext.Provider value={{ bodyState1, setBodyState1, setBodyVariables }}>
             {children && children}
             {!children && <>
-                <TableCompound>
+                <TableCompound columns={[]} captions={[]}>
                     <TableCompound.Header />
                     <TableCompound.Body />
                     <TableCompound.Footer />

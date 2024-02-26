@@ -1,4 +1,4 @@
-import React, { ReactElement, isValidElement, useEffect, useRef } from "react";
+import React, { ReactElement, isValidElement, useRef } from "react";
 
 export default function useFilterNodeChildren({ 
     children,
@@ -28,13 +28,10 @@ export default function useFilterNodeChildren({
     {
         return  React.Children.toArray(children).filter(_childNode =>
         {
-            return isValidElement(_childNode)
-                && !(_childNode as any).type.displayName
+            return isValidElement(_childNode) && !(_childNode as any).type.displayName
         }) as ReactElement[];
         
     }
-    
-    const FinalChildren: ReactElement[] = Array(getTableCompoundDefaultComponents().length).fill(null);
     
     const dynamicIf = (_node: any, _index: number) =>
     {
@@ -44,20 +41,22 @@ export default function useFilterNodeChildren({
             {
                 if (getTableCompoundDefaultComponents().length === defaultsDisplayNames.length)
                 {
-                    FinalChildren[_index] = _node
+                    FinalChildren[_index] = _node;
                 }  
                 else
                 {
-                    console.log(_iName, _node);
-                    defaultComponentsRef.current[_iName] = _node
+                    defaultComponentsRef.current[_iName] = _node;
                 }
             }
         })
     };
-    
-    getTableCompoundDefaultComponents().forEach(dynamicIf);
 
-    const result = FinalChildren.every(_node => isValidElement(_node)) ? FinalChildren : defaultComponentsRef.current  
+    const FinalChildren: ReactElement[] = Array(
+        getTableCompoundDefaultComponents().length === 0 ? 1 :
+        getTableCompoundDefaultComponents().length
+    ).fill(null);
+    getTableCompoundDefaultComponents().forEach(dynamicIf);
+    const result = FinalChildren.every(_node => isValidElement(_node)) ? FinalChildren : defaultComponentsRef.current;
 
     return { CustomChildren: getCustomChildren(), FinalChildren:  result }
 }

@@ -1,7 +1,6 @@
 import { useContext, createContext } from "react";
 
 import TableCompoundActions from "./actions";
-import Td from "./td";
 import TableCompoundRow from "./row";
 
 /**
@@ -9,8 +8,6 @@ import TableCompoundRow from "./row";
 */
 
 interface MyComponentProps {
-    mapTr?: JSX.Element;
-    mapTd?: JSX.Element;
     filter?: (item: any) => boolean | any;
     children?: (args: any) => any
     data?: any[]
@@ -22,34 +19,27 @@ export function useTableCompoundBodyContext()
     return useContext(TableCompoundBodyContext)
 }
 
-const TableCompoundBody = ({ mapTd, mapTr, filter, children }: MyComponentProps) =>
+const TableCompoundBody = ({ filter = () => true, children }: MyComponentProps) =>
 {
     const data: any[] = [{ name: "ali", age: 22 }, { name: "javad", age: 12 }, { name: "aydin", age: 38 }]
-
-    if (filter)
-    {
-        data.filter(filter).map(_item => console.log(_item))
-    }
 
     return (
         <TableCompoundBodyContext.Provider value={{}}>
             <tbody>
                 {
-                    data.map((_row, _index) => children ? children({
-                        row: _row,
-                        index: _index
-                    }): <TableCompoundRow key={_index} />)
+                    data.filter(filter).map((_row, _index) => children ? children({
+                        item: _row,
+                        index: _index,
+                        Row: TableCompoundRow
+                    }): <TableCompoundRow key={_index} row={_row} />)
                 }
             </tbody>
         </TableCompoundBodyContext.Provider>
     )
 }
 
-
-
-TableCompoundBody.displayName = "compound-table-body";
-
 TableCompoundBody.Row = TableCompoundRow;
 TableCompoundBody.Action = TableCompoundActions;
 
+TableCompoundBody.displayName = "compound-table-body";
 export default TableCompoundBody

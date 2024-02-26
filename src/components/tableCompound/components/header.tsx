@@ -1,20 +1,20 @@
 import React from "react";
+import { useTableCompoundContext } from "../tableCompound";
 
 const TableCompoundHeader = ({ children }: { children?: React.ReactNode }) => {
+    const { captions } = useTableCompoundContext();
+
     return <thead>
         {children && children}
         {!children && <tr>
-            <th style={{ textAlign: "left" }}>
-                <div className="px-2" >header 1</div>
-            </th>
-
-            <th>
-                <div className="px-2">hader 2</div>
-            </th>
-            
-            <th>
-                <div className="px-2">actions</div>
-            </th>
+            {
+                captions.map(_cap =>
+                {
+                    return  <th style={{ textAlign: "left" }}>
+                    <div className="px-2" >{_cap}</div>
+                </th>
+                })
+            }
         </tr>}
     </thead>
 }
