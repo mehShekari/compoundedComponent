@@ -5,7 +5,7 @@ import PageCompoundBody from "./components/body";
 import PageCompoundFooter from "./components/footer";
 
 /**
- * * PAGE_COMPUND 
+ * * PAGE_COMPOUND 
 */
 
 const PageCompoundContext = createContext({});

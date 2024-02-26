@@ -40,7 +40,7 @@ const Body = ({ children }: { children?: React.ReactNode }) =>
             {!children && <>
                 <TableCompound>
                     <TableCompound.Header />
-                    <TableCompound.Body filter={(_item) => _item.age !== 22} />
+                    <TableCompound.Body />
                     <TableCompound.Footer />
                 </TableCompound>
             </>}

@@ -7,9 +7,9 @@ import TableCompoundHeader from "./components/header";
 */
 const defaultTableCompoundDisplayNames = ['header', 'body', 'footer'];
 const DefaultTableCompoundComponents = [
-    <TableCompoundHeader key={"header"} />,
     <TableCompoundBody key={"body"} />,
-    <TableCompoundFooter key={"footer"} />
+    <TableCompoundHeader key={"header"} />,
+    <TableCompoundFooter key={"footer"} />,
 ]
 
 const TableCompoundContext = createContext({});
@@ -27,7 +27,7 @@ function TableCompound({ children }: { children: React.ReactNode })
         console.log(e)
     }
 
-    const TableCompoundDefaultCompounents = React.Children.toArray(children).filter(_childNode =>{
+    const TableCompoundDefaultComponents = React.Children.toArray(children).filter(_childNode =>{
         return isValidElement(_childNode) 
             && (_childNode as any).type.displayName && (_childNode as any).type.displayName.includes("compound-table")
     }) as ReactElement[];
@@ -37,7 +37,7 @@ function TableCompound({ children }: { children: React.ReactNode })
             && !(_childNode as any).type.displayName
     }) as ReactElement[];
     
-    const FinalChildren: any[] = Array().fill(null, 0, TableCompoundDefaultCompounents.length - 1);
+    const FinalChildren: any[] = Array().fill(null, 0, TableCompoundDefaultComponents.length - 1);
 
 
     const dynamicIf = (_node: any, _index: number) =>
@@ -46,7 +46,7 @@ function TableCompound({ children }: { children: React.ReactNode })
         {
             if((_node as any).type.displayName === `compound-table-${name}`)
             {
-                if (TableCompoundDefaultCompounents.length === defaultTableCompoundDisplayNames.length)
+                if (TableCompoundDefaultComponents.length === defaultTableCompoundDisplayNames.length)
                     FinalChildren[_index] = _node
                 else
                 {
@@ -56,10 +56,10 @@ function TableCompound({ children }: { children: React.ReactNode })
         })
     }
 
-    TableCompoundDefaultCompounents.forEach(dynamicIf)
+    TableCompoundDefaultComponents.forEach(dynamicIf)
 
     return <TableCompoundContext.Provider value={{ tableCom1, setTableCom1, getTableTest }}>
-        <table style={{ border: "1px solid #f1f1f1",  borderRadius: "5px", padding: "7px" }}>
+        <table style={{ border: "1px solid #f1f1f1",  borderRadius: "5px", padding: "7px", width: "100%" }}>
             {CustomChildren}
             {FinalChildren.length > 0 ? FinalChildren : DefaultTableCompoundComponents.map(_node => _node)}
         </table>
