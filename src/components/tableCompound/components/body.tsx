@@ -1,7 +1,8 @@
-import { useContext, createContext } from "react";
+import { useContext, createContext, useState, SetStateAction } from "react";
 
 import TableCompoundActions from "./actions";
 import TableCompoundRow from "./row";
+import { usePageCompoundContext } from "../../pageCompound/pageCompound";
 
 /**
  * *TABLE COMPOUND BODY 
@@ -21,10 +22,9 @@ export function useTableCompoundBodyContext()
 
 const TableCompoundBody = ({ filter = () => true, children }: MyComponentProps) =>
 {
-    const data: any[] = [{ name: "ali", age: 22 }, { name: "javad", age: 12 }, { name: "aydin", age: 38 }]
-
+    const { data } = usePageCompoundContext() 
     return (
-        <TableCompoundBodyContext.Provider value={{}}>
+        <TableCompoundBodyContext.Provider value={{  }}>
             <tbody>
                 {
                     data.filter(filter).map((_row, _index) => children ? children({

@@ -9,4 +9,5 @@ const PageCompoundFooter = () => {
     )
 }
 
+PageCompoundFooter.displayName = "compound-page-footer"
 export default PageCompoundFooter

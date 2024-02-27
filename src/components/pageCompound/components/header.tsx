@@ -15,7 +15,7 @@ export function usePageCompoundHeaderContext ()
 }
 
 const PageCompoundHeader = ({ children }: { children?: React.ReactNode }) => {
-    const { CustomChildren, FinalChildren } = useFilterNodeChildren({
+    const { FinalChildren } = useFilterNodeChildren({
         children,
         checkDisplayName: "header-",
         defaultsDisplayNames: ['multiSearch', 'singleSearch', 'actions'],
@@ -33,7 +33,7 @@ const PageCompoundHeader = ({ children }: { children?: React.ReactNode }) => {
                 marginBottom: "5px", display: "flex", alignItems: "center", justifyContent: "center",
                 gap: "5px" 
             }} key={"header"}>
-                {CustomChildren}
+                {/* {CustomChildren} */}
                 {FinalChildren}
             </div>
         </PageCompoundHeaderContext.Provider>
@@ -44,5 +44,6 @@ PageCompoundHeader.Actions = Actions;
 PageCompoundHeader.SingleSearch = SingleSearch;
 PageCompoundHeader.MultiSearch = MultiSearch;
 
+PageCompoundHeader.displayName = "compound-page-header"
 export default PageCompoundHeader;
 

@@ -10,7 +10,7 @@ const TableCompoundHeader = ({ children }: { children?: React.ReactNode }) => {
             {
                 captions.map(_cap =>
                 {
-                    return  <th style={{ textAlign: "left" }}>
+                    return  <th style={{ textAlign: "left" }} key={_cap}>
                     <div className="px-2" >{_cap}</div>
                 </th>
                 })

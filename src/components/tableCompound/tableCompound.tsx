@@ -27,7 +27,7 @@ export function useTableCompoundContext()
 function TableCompound({ children, captions, columns }: IProps)
 {
     
-    const { CustomChildren, FinalChildren } = useFilterNodeChildren({
+    const { FinalChildren } = useFilterNodeChildren({
         children,
         checkDisplayName: "compound-table-",
         defaultsDisplayNames:  ['header', 'body', 'footer'],
@@ -40,7 +40,7 @@ function TableCompound({ children, captions, columns }: IProps)
 
     return <TableCompoundContext.Provider value={{ captions, columns }}>
         <table style={{ border: "1px solid #f1f1f1",  borderRadius: "5px", padding: "7px", width: "100%" }}>
-            {CustomChildren}
+            {/* {CustomChildren} */}
             {FinalChildren}
         </table>
     </TableCompoundContext.Provider>

@@ -55,8 +55,17 @@ export default function useFilterNodeChildren({
         getTableCompoundDefaultComponents().length === 0 ? 1 :
         getTableCompoundDefaultComponents().length
     ).fill(null);
+
     getTableCompoundDefaultComponents().forEach(dynamicIf);
-    const result = FinalChildren.every(_node => isValidElement(_node)) ? FinalChildren : defaultComponentsRef.current;
+    const result = FinalChildren.every(_node => isValidElement(_node)) ? children : defaultComponentsRef.current;
+
+    if(getCustomChildren().length > 0)
+    {
+        console.warn(`
+            to see custom components or element inside of section
+            you need to add all default components to the parent section
+        `);
+    }
 
     return { CustomChildren: getCustomChildren(), FinalChildren:  result }
 }

@@ -31,7 +31,7 @@ const TableCompoundRow = ({ children, row,className = "",...rest }: Optional | R
             onClick={() => console.log("click")}
             className={className} 
             {...rest.rest}
-            >
+        >
             {children && !row && children}
             {!children && row && <>
                 <Td row={row} />

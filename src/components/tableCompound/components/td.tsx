@@ -8,7 +8,7 @@ const Td = ({ row }: { row: any }) =>
             columns.map(_col =>
             {
                 if(row[_col] == null) return;
-                return <td>
+                return <td key={_col}>
                     <div key={row[_col]} 
                         className="px-2" 
                         style={{ padding: "5px", textAlign: "left" }}

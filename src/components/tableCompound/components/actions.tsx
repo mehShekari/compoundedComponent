@@ -1,42 +1,47 @@
 import { createContext, useContext } from "react";
+import { DeleteComponent } from "./btns/delete";
+import { EditComponent } from "./btns/edit";
+import { DetailComponent } from "./btns/detail";
 
 
-interface childrenArgsTypes  {
-    DeleteBtn: any,
-    EditBtn: any,
-    DetailBtn: any,
+interface CommonTypes {
     DeleteHandler: (args: any) => any,
     editHandler: (args: any) => any,
     detailHandler: (args: any) => any
 }
 
-const TableCompoundActionContext = createContext({} as {
-    DeleteHandler: (args: any) => any,
-    editHandler: (args: any) => any,
-    detailHandler: (args: any) => any,
-    row: any
-});
+interface childrenArgsTypes extends CommonTypes  {
+    DeleteBtn: any,
+    EditBtn: any,
+    DetailBtn: any,
+}
+
+const TableCompoundActionContext = createContext({} as CommonTypes & { row: any });
 export const useTableCompoundActionContext = () =>
 {
     return useContext(TableCompoundActionContext);
 }
 
+interface IProps {
+    row: any
+    children?: ((args: childrenArgsTypes) => any) | React.ReactNode 
+}
 
-const TableCompoundActions = ({ children, row }: { row:any, children?: ((args: childrenArgsTypes) => any) | React.ReactNode }) => 
+const TableCompoundActions = ({ children, row }: IProps) => 
 {
-    const DeleteHandler = (row: any) =>
+    const DeleteHandler = (_row: any) =>
     {
-        console.log("default click", row)
+        console.log("default click", _row)
     }
 
-    const editHandler = () =>
+    const editHandler = (_row: any) =>
     {
-
+        console.log("default click edit", _row)
     }
 
-    const detailHandler = () =>
+    const detailHandler = (_row: any) =>
     {
-
+        console.log("default click detail", row)
     }
 
     return <TableCompoundActionContext.Provider value={{
@@ -68,22 +73,6 @@ const TableCompoundActions = ({ children, row }: { row:any, children?: ((args: c
             </div>
         </td>
     </TableCompoundActionContext.Provider>
-}
-
-const DeleteComponent = ({ onClick }: { onClick?: (arg: any) => void }) =>
-{
-    const { DeleteHandler, row } = useTableCompoundActionContext();
-    return <button onClick={() => onClick ? onClick(row) : DeleteHandler(row)}>delete</button>
-}
-
-const EditComponent = () =>
-{
-    return <button>edit</button>
-}
-
-const DetailComponent = () =>
-{
-    return <button>detail</button>
 }
 
 TableCompoundActions.Delete = DeleteComponent;

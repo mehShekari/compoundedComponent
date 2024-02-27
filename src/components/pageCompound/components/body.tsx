@@ -25,7 +25,7 @@ export function useBodyPageCompoundContext()
     return useContext(BodyPageCompoundContext);
 }
 
-const Body = ({ children }: { children?: React.ReactNode }) =>
+const CompoundPageBody = ({ children }: { children?: React.ReactNode }) =>
 {
     const [bodyState1, setBodyState1] = useState("");
 
@@ -38,7 +38,7 @@ const Body = ({ children }: { children?: React.ReactNode }) =>
         <BodyPageCompoundContext.Provider value={{ bodyState1, setBodyState1, setBodyVariables }}>
             {children && children}
             {!children && <>
-                <TableCompound columns={[]} captions={[]}>
+                <TableCompound columns={["name", "age"]} captions={["name", "age"]}>
                     <TableCompound.Header />
                     <TableCompound.Body />
                     <TableCompound.Footer />
@@ -48,4 +48,5 @@ const Body = ({ children }: { children?: React.ReactNode }) =>
     )
 }
 
-export default Body
+CompoundPageBody.displayName = "compound-page-body"
+export default CompoundPageBody
