@@ -1,5 +1,18 @@
-import React, { ReactElement, isValidElement, useRef } from "react";
+import React, { ReactElement, isValidElement, useCallback, useEffect, useRef } from "react";
 
+/**
+ * @param {
+ *      children
+ *      checkDisplayName
+ *      defaultsDisplayNames
+ *      defaultComponents
+ * }
+ * 
+ * @returns {
+ *      CustomChildren
+ *      FinalChildren
+ * }
+ **/
 export default function useFilterNodeChildren({ 
     children,
     checkDisplayName,
@@ -14,24 +27,23 @@ export default function useFilterNodeChildren({
 {
     const defaultComponentsRef = useRef(defaultComponents);
 
-
-    const getTableCompoundDefaultComponents = (): ReactElement[] =>
+    const getTableCompoundDefaultComponents = useCallback((): ReactElement[] =>
     {
         return React.Children.toArray(children).filter(_childNode =>
         {
             return isValidElement(_childNode)
                 && (_childNode as any).type.displayName && (_childNode as any).type.displayName.includes(checkDisplayName)
         }) as ReactElement[];
-    }
+    }, [])
 
-    const getCustomChildren = () =>
+    const getCustomChildren = useCallback(() =>
     {
+
         return  React.Children.toArray(children).filter(_childNode =>
         {
             return isValidElement(_childNode) && !(_childNode as any).type.displayName
-        }) as ReactElement[];
-        
-    }
+        }) as ReactElement[];        
+    }, [])
     
     const dynamicIf = (_node: any, _index: number) =>
     {
@@ -59,13 +71,16 @@ export default function useFilterNodeChildren({
     getTableCompoundDefaultComponents().forEach(dynamicIf);
     const result = FinalChildren.every(_node => isValidElement(_node)) ? children : defaultComponentsRef.current;
 
-    if(getCustomChildren().length > 0)
+    useEffect(() =>
     {
-        console.warn(`
-            to see custom components or element inside of section
-            you need to add all default components to the parent section
-        `);
-    }
+        if(getCustomChildren().length > 0)
+        {
+            console.warn(`
+                to see custom components or elements inside of the section 
+                you need to add all default children components to the parent section
+            `);
+        }
+    }, [getCustomChildren().length])
 
     return { CustomChildren: getCustomChildren(), FinalChildren:  result }
 }

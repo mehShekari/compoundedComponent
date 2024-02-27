@@ -11,7 +11,7 @@ function App() {
 
     return (
         <ErrorBoundary fallBack={<>Error</>}>
-            {/* <PageCompound>
+            <PageCompound>
                 <PageCompound.Header>
                     <PageCompound.Header.MultiSearch />
                     <PageCompound.Header.SingleSearch />
@@ -45,9 +45,8 @@ function App() {
                     </TableCompound>
                 </PageCompound.Body>
                 <PageCompound.Footer />
-            </PageCompound> */}
-
-            <TestComponent />
+            </PageCompound>
+            {/* <TestComponent /> */}
         </ErrorBoundary>
     )
 }

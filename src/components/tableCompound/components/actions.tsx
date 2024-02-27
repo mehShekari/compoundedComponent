@@ -56,7 +56,7 @@ const TableCompoundActions = ({ children, row }: IProps) =>
             onMouseDown={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}            
         >
-            <div className="px-2" style={{ padding: "5px", textAlign: "left" }}>
+            <div className="px-2" style={{ padding: "5px", textAlign: "left", display: "flex", gap:"5px" }}>
                 {children == null && (<>    
                     <DeleteComponent />
                     <EditComponent />
