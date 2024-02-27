@@ -2,7 +2,6 @@ import { useState } from 'react'
 import './App.css'
 import PageCompound from './components/pageCompound/pageCompound'
 import TableCompound from './components/tableCompound/tableCompound'
-import TestComponent from './components/component.test'
 import ErrorBoundary from './utils/errorBoundary'
 
 function App() {
