@@ -4,6 +4,8 @@ import PageCompoundHeader from "./components/header";
 import PageCompoundBody from "./components/body";
 import PageCompoundFooter from "./components/footer";
 import useFilterNodeChildren from "../../hooks/useFilterNodeChildren";
+import ErrorBoundary from "../../utils/errorBoundary";
+import FallBack from "../../utils/fallback";
 
 /**
  * * PAGE_COMPOUND 
@@ -38,13 +40,18 @@ function PageCompound({ children }: { children?: React.ReactNode }){
         ]
     })
 
-    return <PageCompoundContext.Provider value={{
-        data, setData,
-        getTest
+    return <ErrorBoundary fallBack={(message) => {
+        return <FallBack message={message} />
     }}>
-        {/* {CustomChildren} */}
-        {FinalChildren}
-    </PageCompoundContext.Provider>
+        <PageCompoundContext.Provider value={{
+            data, setData,
+            getTest
+        }}>
+            {/* {CustomChildren} */}
+            {FinalChildren}
+        </PageCompoundContext.Provider>
+    </ErrorBoundary> 
+    
 }
 
 PageCompound.Header = PageCompoundHeader;

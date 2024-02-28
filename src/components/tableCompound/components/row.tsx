@@ -43,4 +43,6 @@ const TableCompoundRow = ({ children, row,className = "",...rest }: Optional | R
 
 TableCompoundRow.Actions = TableCompoundActions;
 TableCompoundRow.Td = Td;
+
+
 export default TableCompoundRow

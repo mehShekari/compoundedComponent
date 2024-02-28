@@ -3,21 +3,23 @@ import './App.css'
 import PageCompound from './components/pageCompound/pageCompound'
 import TableCompound from './components/tableCompound/tableCompound'
 import ErrorBoundary from './utils/errorBoundary'
+import FallBack from './utils/fallback'
 
 function App() {
     const [state, setState] = useState(0)
     console.log(state)
 
     return (
-        <ErrorBoundary fallBack={<>Error</>}>
+        <ErrorBoundary fallBack={(message) =>{
+           return <FallBack message={message} />
+        }}>
             <PageCompound>
-                <PageCompound.Header>
-                    <PageCompound.Header.MultiSearch />
-                    <PageCompound.Header.SingleSearch />
-                    <PageCompound.Header.Actions className='bg-red' />
-                </PageCompound.Header>
+            <PageCompound.Header >
+                <PageCompound.Header.Actions className='bg-red' />
+            </PageCompound.Header>
                 <PageCompound.Body>
                     <TableCompound captions={["name", "age"]} columns={["name", "age"]}>
+                        <TableCompound.Header />
                         <TableCompound.Body>
                             {({ index, item }) => {
                                 if (index === 0) {
@@ -43,7 +45,6 @@ function App() {
                         </TableCompound.Body>
                     </TableCompound>
                 </PageCompound.Body>
-                <PageCompound.Footer />
             </PageCompound>
             {/* <TestComponent /> */}
         </ErrorBoundary>

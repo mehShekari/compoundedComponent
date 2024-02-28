@@ -1,9 +1,12 @@
+import { usePageCompoundContext } from "../../pageCompound/pageCompound";
+
 const TableCompoundFooter = () =>
 {
+    const { data } = usePageCompoundContext()
     return <tfoot>
         <tr>
             <th scope="row">Totals</th>
-            <td>21,000</td>
+            <td>{data.length} length</td>
         </tr>
     </tfoot>
 }

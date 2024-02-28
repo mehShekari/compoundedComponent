@@ -15,6 +15,7 @@ const TableCompoundHeader = ({ children }: { children?: React.ReactNode }) => {
                 </th>
                 })
             }
+             <th style={{ textAlign: "left" }}><div className="px-2" >action</div></th>
         </tr>}
     </thead>
 }
