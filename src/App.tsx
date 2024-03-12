@@ -10,13 +10,16 @@ function App() {
     console.log(state)
 
     return (
-        <ErrorBoundary fallBack={(message) =>{
-           return <FallBack message={message} />
+        <ErrorBoundary fallBack={(message) => {
+            return <FallBack message={message} />
         }}>
             <PageCompound>
-            <PageCompound.Header >
-                <PageCompound.Header.Actions className='bg-red' />
-            </PageCompound.Header>
+                <PageCompound.Header >
+                    <PageCompound.Header.MultiSearch  />
+                    <div>thest</div>
+                    <PageCompound.Header.SingleSearch  />
+                    <PageCompound.Header.Actions className='bg-red' />
+                </PageCompound.Header>
                 <PageCompound.Body>
                     <TableCompound captions={["name", "age"]} columns={["name", "age"]}>
                         <TableCompound.Header />
@@ -30,14 +33,15 @@ function App() {
                                             }
                                         }}
                                     >
-                                        <TableCompound.Body.Row.Td row={item} />
+                                        <div></div>
+                                        {/* <TableCompound.Body.Row.Td row={item} />
                                         <TableCompound.Body.Row.Actions row={item}>
                                             {({ DeleteBtn, EditBtn, DetailBtn }) => <>
                                                 <DeleteBtn />
                                                 <EditBtn />
                                                 <DetailBtn />
                                             </>}
-                                        </TableCompound.Body.Row.Actions>
+                                        </TableCompound.Body.Row.Actions> */}
                                     </TableCompound.Body.Row>
                                 }
                                 return <TableCompound.Body.Row key={index} row={item} />
