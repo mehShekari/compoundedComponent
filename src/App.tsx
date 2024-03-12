@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import './App.css'
-import PageCompound from './components/pageCompound/pageCompound'
-import TableCompound from './components/tableCompound/tableCompound'
-import ErrorBoundary from './utils/errorBoundary'
-import FallBack from './utils/fallback'
+import PageCompound from './compounds/components/pageCompound/pageCompound'
+import TableCompound from './compounds/components/tableCompound/tableCompound'
+import ErrorBoundary from './compounds/utils/errorBoundary'
+import FallBack from './compounds/utils/fallback'
 
 function App() {
     const [state, setState] = useState(0)
@@ -26,25 +26,24 @@ function App() {
                         <TableCompound.Body>
                             {({ index, item }) => {
                                 if (index === 0) {
-                                    return <TableCompound.Body.Row key={index} className='bg-red'
+                                    return <TableCompound.Body.Row  index={index} key={index} className='bg-red'
                                         rest={{
                                             onClick(_) {
                                                 setState(prev => prev + 1)
                                             }
                                         }}
-                                    >
-                                        <div></div>
-                                        {/* <TableCompound.Body.Row.Td row={item} />
-                                        <TableCompound.Body.Row.Actions row={item}>
+                                    >   
+                                        <TableCompound.Body.Row.Td row={item} />
+                                        <TableCompound.Body.Row.Actions row={item} index={index}>
                                             {({ DeleteBtn, EditBtn, DetailBtn }) => <>
                                                 <DeleteBtn />
                                                 <EditBtn />
                                                 <DetailBtn />
                                             </>}
-                                        </TableCompound.Body.Row.Actions> */}
+                                        </TableCompound.Body.Row.Actions>
                                     </TableCompound.Body.Row>
                                 }
-                                return <TableCompound.Body.Row key={index} row={item} />
+                                return <TableCompound.Body.Row key={index} row={item} index={index} />
                             }}
                         </TableCompound.Body>
                     </TableCompound>
