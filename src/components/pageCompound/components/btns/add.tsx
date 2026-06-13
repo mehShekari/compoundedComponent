@@ -1,10 +1,19 @@
-import { usePageCompoundActionsContext } from "../actions"
+import { usePageCompoundActionsContext } from "../actions";
 
-export default function AddComponent({ onClick }: { onClick?: (arg?: any) => void })
-{
-    const { addHandler } = usePageCompoundActionsContext();
-    
-    return <div>
-        <button onClick={() => onClick ? onClick(): addHandler()}>🗑</button>
-    </div>
+type AddComponentProps = {
+  onClick?: () => void;
+};
+
+export default function AddComponent({ onClick }: AddComponentProps) {
+  const { addHandler } = usePageCompoundActionsContext();
+
+  return (
+    <button
+      type="button"
+      aria-label="Add row"
+      onClick={() => (onClick ? onClick() : addHandler())}
+    >
+      + Add
+    </button>
+  );
 }

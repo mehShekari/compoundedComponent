@@ -1,52 +1,43 @@
-import React, {
-    // ReactElement, 
-    // isValidElement, 
-    createContext,
-    useContext,
-    useState
-} from "react";
+import { createContext, useContext, useState } from "react";
+
 import TableCompound from "../../tableCompound/tableCompound";
-// import TableCompound from "../../tableCompound/tableCompound";
+import { DEFAULT_USER_TABLE } from "../../../constants/defaultTableConfig";
 
+type BodyPageCompoundContextValue = {
+  bodyState1: string;
+  setBodyState1: React.Dispatch<React.SetStateAction<string>>;
+};
 
-/** 
- * * PAGECOMPOUND_BODY
-**/
+const BodyPageCompoundContext = createContext<BodyPageCompoundContextValue | null>(null);
 
-type BodyTypes = {
-    bodyState1: string,
-    setBodyState1: React.Dispatch<React.SetStateAction<string>>
-    setBodyVariables: <T>(args: T) => void
+export function useBodyPageCompoundContext(): BodyPageCompoundContextValue {
+  const context = useContext(BodyPageCompoundContext);
+  if (!context) {
+    throw new Error("useBodyPageCompoundContext must be used within PageCompound.Body");
+  }
+  return context;
 }
 
-const BodyPageCompoundContext = createContext({} as BodyTypes);
-export function useBodyPageCompoundContext()
-{
-    return useContext(BodyPageCompoundContext);
-}
+const PageCompoundBody = ({ children }: { children?: React.ReactNode }) => {
+  const [bodyState1, setBodyState1] = useState("");
 
-const CompoundPageBody = ({ children }: { children?: React.ReactNode }) =>
-{
-    const [bodyState1, setBodyState1] = useState("");
+  const contextValue = { bodyState1, setBodyState1 };
 
-    function setBodyVariables<T>(args: T)
-    {
-        console.log(args);
-    }
-  
-    return (
-        <BodyPageCompoundContext.Provider value={{ bodyState1, setBodyState1, setBodyVariables }}>
-            {children && children}
-            {!children && <>
-                <TableCompound columns={["name", "age"]} captions={["name", "age"]}>
-                    <TableCompound.Header />
-                    <TableCompound.Body />
-                    <TableCompound.Footer />
-                </TableCompound>
-            </>}
-        </BodyPageCompoundContext.Provider>
-    )
-}
+  return (
+    <BodyPageCompoundContext.Provider value={contextValue}>
+      {children ?? (
+        <TableCompound
+          columns={[...DEFAULT_USER_TABLE.columns]}
+          captions={[...DEFAULT_USER_TABLE.captions]}
+        >
+          <TableCompound.Header />
+          <TableCompound.Body />
+          <TableCompound.Footer />
+        </TableCompound>
+      )}
+    </BodyPageCompoundContext.Provider>
+  );
+};
 
-CompoundPageBody.displayName = "compound-page-body"
-export default CompoundPageBody
+PageCompoundBody.displayName = "compound-page-body";
+export default PageCompoundBody;

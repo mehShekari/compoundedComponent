@@ -1,39 +1,33 @@
 import { Component, ErrorInfo, ReactNode } from "react";
 
-type TProps = {
-    // using `interface` is also ok
-    fallBack: (message: string) =>  React.ReactNode, 
-    children: React.ReactNode
+type ErrorBoundaryProps = {
+  fallBack: (message: string) => ReactNode;
+  children: ReactNode;
 };
 
-type TState = {
-    hasError: boolean
-    errorMessage: any
-}
+type ErrorBoundaryState = {
+  hasError: boolean;
+  errorMessage: string | null;
+};
 
-export default class ErrorBoundary extends Component<TProps, TState>
-{
-    state: TState = { 
-        hasError: false,
-        errorMessage: null
-    }
+export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  state: ErrorBoundaryState = {
+    hasError: false,
+    errorMessage: null,
+  };
 
-    static getDerivedStateFromError()
-    {
-        return { hasError: true }
-    }
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, errorMessage: error.message };
+  }
 
-    componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-        console.error(error)
-        console.error(errorInfo)
-        this.state.errorMessage = error.message
-    }
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    console.error(error, errorInfo);
+  }
 
-    render(): ReactNode {
-        if(this.state.hasError)
-            return <>
-                {this.props.fallBack(this.state.errorMessage)}
-            </>
-        else return this.props.children
+  render(): ReactNode {
+    if (this.state.hasError) {
+      return this.props.fallBack(this.state.errorMessage ?? "Unknown error");
     }
+    return this.props.children;
+  }
 }

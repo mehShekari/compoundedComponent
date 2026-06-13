@@ -1,24 +1,29 @@
-import React from "react";
-import { useTableCompoundContext } from "../tableCompound";
+import { useTableCompoundContext } from "../context/tableCompoundContext";
 
-const TableCompoundHeader = ({ children }: { children?: React.ReactNode }) => {
-    const { captions } = useTableCompoundContext();
+type TableCompoundHeaderProps = {
+  children?: React.ReactNode;
+};
 
-    return <thead>
-        {children && children}
-        {!children && <tr>
-            {
-                captions.map(_cap =>
-                {
-                    return  <th style={{ textAlign: "left" }} key={_cap}>
-                    <div className="px-2" >{_cap}</div>
-                </th>
-                })
-            }
-             <th style={{ textAlign: "left" }}><div className="px-2" >action</div></th>
-        </tr>}
+const TableCompoundHeader = ({ children }: TableCompoundHeaderProps) => {
+  const { captions } = useTableCompoundContext();
+
+  return (
+    <thead>
+      {children ?? (
+        <tr>
+          {captions.map((caption) => (
+            <th key={caption} scope="col" style={{ textAlign: "left" }}>
+              <div className="px-2">{caption}</div>
+            </th>
+          ))}
+          <th scope="col" style={{ textAlign: "left" }}>
+            <div className="px-2">Actions</div>
+          </th>
+        </tr>
+      )}
     </thead>
-}
+  );
+};
 
 TableCompoundHeader.displayName = "compound-table-header";
 export default TableCompoundHeader;

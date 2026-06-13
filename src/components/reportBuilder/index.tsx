@@ -60,7 +60,7 @@ export default function ReportBuilder() {
   const paperRef = useRef<HTMLDivElement>(null);
   const [rotationType, setRotationType] = useState<string>("vert");
   const [pageType, setPageType] = useState<string>("A4");
-  const [headerReport, setHeaderReport] = useState<boolean>(false);
+  const [, setHeaderReport] = useState<boolean>(false);
 
 
   const pageSizeChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {

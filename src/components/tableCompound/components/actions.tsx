@@ -1,76 +1,117 @@
-import { createContext, useContext } from "react";
+import { createContext, useCallback, useContext, useMemo, type ComponentType } from "react";
+
 import { DeleteComponent } from "./btns/delete";
 import { EditComponent } from "./btns/edit";
 import { DetailComponent } from "./btns/detail";
+import { useTableData } from "../context/tableDataContext";
+import type { UserRow } from "../../../types/page.types";
 
+type TableCompoundActionsContextValue = {
+  deleteHandler: (row: UserRow, event?: React.MouseEvent<HTMLElement>) => void;
+  editHandler: (row: UserRow) => void;
+  detailHandler: (row: UserRow) => void;
+  row: UserRow;
+  index: number;
+};
 
+type TableCompoundActionsRenderProps = Pick<
+  TableCompoundActionsContextValue,
+  "deleteHandler" | "editHandler" | "detailHandler"
+> & {
+  deleteBtn: ComponentType<{ onClick?: (row: UserRow) => void }>;
+  editBtn: ComponentType<{ onClick?: (row: UserRow) => void }>;
+  detailBtn: ComponentType<{ onClick?: (row: UserRow) => void }>;
+};
 
-interface CommonTypes {
-  DeleteHandler: (e: React.MouseEvent<HTMLElement>, args: any) => any,
-  editHandler: (args: any) => any,
-  detailHandler: (args: any) => any
+const TableCompoundActionContext = createContext<TableCompoundActionsContextValue | null>(null);
+
+export function useTableCompoundActionContext(): TableCompoundActionsContextValue {
+  const context = useContext(TableCompoundActionContext);
+  if (!context) {
+    throw new Error("useTableCompoundActionContext must be used within TableCompoundActions");
+  }
+  return context;
 }
 
-interface childrenArgsTypes extends CommonTypes {
-  DeleteBtn: JSX.ElementType,
-  EditBtn: JSX.ElementType,
-  DetailBtn: JSX.ElementType,
-}
+type TableCompoundActionsProps = {
+  row: UserRow;
+  index: number;
+  children?: ((args: TableCompoundActionsRenderProps) => React.ReactNode) | React.ReactNode;
+  className?: string;
+};
 
-const TableCompoundActionContext = createContext({} as CommonTypes & { row: any, index: number });
-export const useTableCompoundActionContext = () => {
-  return useContext(TableCompoundActionContext);
-}
+const TableCompoundActions = ({
+  children,
+  row,
+  className,
+  index,
+}: TableCompoundActionsProps) => {
+  const { setData } = useTableData();
 
-interface IProps {
-  row: any
-  children?: ((args: childrenArgsTypes) => JSX.Element) | React.ReactNode
-  className?: string
-  index: number
-}
+  const deleteHandler = useCallback(
+    (targetRow: UserRow, event?: React.MouseEvent<HTMLElement>) => {
+      event?.stopPropagation();
+      setData((prev) => prev.filter((item) => item.id !== targetRow.id));
+    },
+    [setData],
+  );
 
-const TableCompoundActions = ({ children, row, className, index }: IProps) => {
+  const editHandler = useCallback((targetRow: UserRow) => {
+    // TODO: implement edit flow
+    void targetRow;
+  }, []);
 
-  const DeleteHandler = (e: React.MouseEvent<HTMLElement>, _row: any) => { console.log(e); }
+  const detailHandler = useCallback((targetRow: UserRow) => {
+    // TODO: implement detail view
+    void targetRow;
+  }, []);
 
-  const editHandler = (_row: any) => {console.log(_row) }
+  const contextValue = useMemo(
+    () => ({
+      deleteHandler,
+      editHandler,
+      detailHandler,
+      row,
+      index,
+    }),
+    [deleteHandler, editHandler, detailHandler, row, index],
+  );
 
-  const detailHandler = (_row: any) => { console.log(_row) }
-
-  return <TableCompoundActionContext.Provider value={{
-    DeleteHandler,
+  const renderProps: TableCompoundActionsRenderProps = {
+    deleteBtn: DeleteComponent,
+    editBtn: EditComponent,
+    detailBtn: DetailComponent,
+    deleteHandler,
     editHandler,
     detailHandler,
-    row,
-    index
-  }}>
-    <td
-      onClick={(e) => e.stopPropagation()}
-      onKeyDown={(e) => e.stopPropagation()}
-      onMouseDown={(e) => e.stopPropagation()}
-      onTouchEnd={(e) => e.stopPropagation()}
-      className={className}
-    >
-      <div className="px-2 flex items-stretch gap-2">
-        {children == null && (<>
-          <EditComponent />
-          <DeleteComponent />
-        </>)}
-        {children && (children instanceof Function) && children({
-          DeleteBtn: DeleteComponent,
-          EditBtn: EditComponent,
-          DetailBtn: DetailComponent,
-          DeleteHandler,
-          detailHandler,
-          editHandler
-        })}
-        {children && !(children instanceof Function) && children}
-      </div>
-    </td>
-  </TableCompoundActionContext.Provider>
-}
+  };
+
+  return (
+    <TableCompoundActionContext.Provider value={contextValue}>
+      <td
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+        className={className}
+      >
+        <div className="px-2 flex items-stretch gap-2">
+          {children == null && (
+            <>
+              <EditComponent />
+              <DeleteComponent />
+            </>
+          )}
+          {typeof children === "function" && children(renderProps)}
+          {children != null && typeof children !== "function" && children}
+        </div>
+      </td>
+    </TableCompoundActionContext.Provider>
+  );
+};
 
 TableCompoundActions.Delete = DeleteComponent;
 TableCompoundActions.Edit = EditComponent;
 TableCompoundActions.Detail = DetailComponent;
+
 export default TableCompoundActions;

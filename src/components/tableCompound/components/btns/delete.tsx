@@ -1,7 +1,20 @@
 import { useTableCompoundActionContext } from "../actions";
+import type { UserRow } from "../../../../types/page.types";
 
-export const DeleteComponent = ({ onClick }: { onClick?: (arg: any) => void }) =>
-{
-    const { DeleteHandler, row } = useTableCompoundActionContext();
-    return <button onClick={() => onClick ? onClick(row) : DeleteHandler(row)}>delete</button>
-}
+type DeleteComponentProps = {
+  onClick?: (row: UserRow) => void;
+};
+
+export const DeleteComponent = ({ onClick }: DeleteComponentProps) => {
+  const { deleteHandler, row } = useTableCompoundActionContext();
+
+  return (
+    <button
+      type="button"
+      aria-label={`Delete row ${row.name}`}
+      onClick={(e) => (onClick ? onClick(row) : deleteHandler(row, e))}
+    >
+      Delete
+    </button>
+  );
+};

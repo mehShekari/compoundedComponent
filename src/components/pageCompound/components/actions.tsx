@@ -1,87 +1,97 @@
-import { createContext, useContext } from "react";
+import { createContext, useCallback, useContext, useMemo, type ComponentType } from "react";
 
 import AddComponent from "./btns/add";
 import ExcelComponent from "./btns/excel";
 import PrintComponent from "./btns/print";
-import { usePageCompoundContext } from "../pageCompound";
+import { useTableData } from "../../tableCompound/context/tableDataContext";
 
-interface CommonTypes {
-    addHandler: (args?: any) => any,
-    ExcelHandler: (args?: any) => any,
-    PrintHandler: (args?: any) => any
+type PageCompoundActionsContextValue = {
+  addHandler: () => void;
+  excelHandler: () => void;
+  printHandler: () => void;
+  btnClassName?: string;
+};
+
+type PageCompoundActionsRenderProps = PageCompoundActionsContextValue & {
+  addBtn: ComponentType<{ onClick?: () => void }>;
+  excelBtn: ComponentType<{ onClick?: () => void }>;
+  printBtn: ComponentType<{ onClick?: () => void }>;
+};
+
+const PageCompoundActionsContext = createContext<PageCompoundActionsContextValue | null>(null);
+
+export function usePageCompoundActionsContext(): PageCompoundActionsContextValue {
+  const context = useContext(PageCompoundActionsContext);
+  if (!context) {
+    throw new Error("usePageCompoundActionsContext must be used within PageCompound.Header.Actions");
+  }
+  return context;
 }
 
-interface childrenArgsTypes extends CommonTypes {
-    addBtn: any,
-    PrintBtn: any,
-    excelBtn: any,
-}
+type ActionsProps = {
+  className?: string;
+  children?: ((args: PageCompoundActionsRenderProps) => React.ReactNode) | React.ReactNode;
+  btnClassName?: string;
+};
 
-const PageCompoundActionsContext = createContext({} as CommonTypes & { btnClassName?: string });
-export function usePageCompoundActionsContext()
-{
-    return useContext(PageCompoundActionsContext);
-}
+const Actions = ({ className, children, btnClassName }: ActionsProps) => {
+  const { setData } = useTableData();
 
-interface IProps {
-    className?: string
-    children?: ((args: childrenArgsTypes) => any) | React.ReactNode
-    btnClassName?: string 
-}
+  const addHandler = useCallback(() => {
+    setData((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), name: "John", age: 55 },
+    ]);
+  }, [setData]);
 
-const Actions = ({ className, children, btnClassName }: IProps) =>
-{
-    const { setData, data } = usePageCompoundContext() 
+  const excelHandler = useCallback(() => {
+    // TODO: implement Excel export
+  }, []);
 
-    const addHandler = () =>
-    {
-        setData(() =>
-        {
-            return [...data, {
-                name: "John", age: 55
-            }]
-        })
-    }
+  const printHandler = useCallback(() => {
+    // TODO: implement print
+  }, []);
 
-    const ExcelHandler = () =>
-    {
+  const contextValue = useMemo(
+    () => ({
+      addHandler,
+      excelHandler,
+      printHandler,
+      btnClassName,
+    }),
+    [addHandler, excelHandler, printHandler, btnClassName],
+  );
 
-    }
+  const renderProps: PageCompoundActionsRenderProps = {
+    addBtn: AddComponent,
+    excelBtn: ExcelComponent,
+    printBtn: PrintComponent,
+    addHandler,
+    excelHandler,
+    printHandler,
+    btnClassName,
+  };
 
-    const PrintHandler = () =>
-    {
-
-    }
-
-    return <PageCompoundActionsContext.Provider value={{
-        addHandler,
-        ExcelHandler,
-        PrintHandler,
-        btnClassName
-    }}> 
-        <div style={{ display: "flex", gap: "3px" }} className={className}>
-            
-            {children == null && (<>    
-                    <AddComponent />
-                    <ExcelComponent />
-                    <PrintComponent />
-                </>)}
-                {children && (children instanceof Function) && children({
-                    addBtn: AddComponent,
-                    excelBtn: ExcelComponent,
-                    PrintBtn: PrintComponent,
-                    addHandler,
-                    ExcelHandler,
-                    PrintHandler
-                })}
-                {children && !(children instanceof Function) && children}
-        </div>
+  return (
+    <PageCompoundActionsContext.Provider value={contextValue}>
+      <div style={{ display: "flex", gap: "3px" }} className={className}>
+        {children == null && (
+          <>
+            <AddComponent />
+            <ExcelComponent />
+            <PrintComponent />
+          </>
+        )}
+        {typeof children === "function" && children(renderProps)}
+        {children != null && typeof children !== "function" && children}
+      </div>
     </PageCompoundActionsContext.Provider>
-}
+  );
+};
 
 Actions.Add = AddComponent;
 Actions.Excel = ExcelComponent;
 Actions.Print = PrintComponent;
 
 Actions.displayName = "header-actions";
-export default Actions; 
+export default Actions;

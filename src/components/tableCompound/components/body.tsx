@@ -1,45 +1,38 @@
-import { useContext, createContext, useState, SetStateAction } from "react";
-
 import TableCompoundActions from "./actions";
 import TableCompoundRow from "./row";
-import { usePageCompoundContext } from "../../pageCompound/pageCompound";
+import { useTableData } from "../context/tableDataContext";
+import type { UserRow } from "../../../types/page.types";
+import type { TableRowFilter } from "../../../types/table.types";
 
-/**
- * *TABLE COMPOUND BODY 
-*/
+type TableBodyRenderProps = {
+  item: UserRow;
+  index: number;
+  Row: typeof TableCompoundRow;
+};
 
-interface MyComponentProps {
-    filter?: (item: any) => boolean | any;
-    children?: (args: any) => any
-    data?: any[]
-}
+type TableCompoundBodyProps = {
+  filter?: TableRowFilter<UserRow>;
+  children?: (args: TableBodyRenderProps) => React.ReactNode;
+};
 
-const TableCompoundBodyContext = createContext({});
-export function useTableCompoundBodyContext()
-{
-    return useContext(TableCompoundBodyContext)
-}
+const TableCompoundBody = ({ filter = () => true, children }: TableCompoundBodyProps) => {
+  const { data } = useTableData();
 
-const TableCompoundBody = ({ filter = () => true, children }: MyComponentProps) =>
-{
-    const { data } = usePageCompoundContext() 
-    return (
-        <TableCompoundBodyContext.Provider value={{  }}>
-            <tbody>
-                {
-                    data.filter(filter).map((_row, _index) => children ? children({
-                        item: _row,
-                        index: _index,
-                        Row: TableCompoundRow
-                    }): <TableCompoundRow key={_index} row={_row} />)
-                }
-            </tbody>
-        </TableCompoundBodyContext.Provider>
-    )
-}
+  return (
+    <tbody>
+      {data.filter(filter).map((row, index) =>
+        children ? (
+          children({ item: row, index, Row: TableCompoundRow })
+        ) : (
+          <TableCompoundRow key={row.id} row={row} index={index} />
+        ),
+      )}
+    </tbody>
+  );
+};
 
 TableCompoundBody.Row = TableCompoundRow;
 TableCompoundBody.Action = TableCompoundActions;
 
 TableCompoundBody.displayName = "compound-table-body";
-export default TableCompoundBody
+export default TableCompoundBody;

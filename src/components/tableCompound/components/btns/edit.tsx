@@ -1,8 +1,20 @@
 import { useTableCompoundActionContext } from "../actions";
+import type { UserRow } from "../../../../types/page.types";
 
-export const EditComponent = ({ onClick }: { onClick?: (arg: any) => void }) =>
-{
-    const { editHandler, row } = useTableCompoundActionContext();
+type EditComponentProps = {
+  onClick?: (row: UserRow) => void;
+};
 
-    return <button  onClick={() => onClick ? onClick(row) : editHandler(row)}>edit</button>
-}
+export const EditComponent = ({ onClick }: EditComponentProps) => {
+  const { editHandler, row } = useTableCompoundActionContext();
+
+  return (
+    <button
+      type="button"
+      aria-label={`Edit row ${row.name}`}
+      onClick={() => (onClick ? onClick(row) : editHandler(row))}
+    >
+      Edit
+    </button>
+  );
+};

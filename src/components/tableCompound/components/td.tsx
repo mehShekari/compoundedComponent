@@ -1,25 +1,30 @@
-import { useTableCompoundContext } from "../tableCompound";
+import { useTableCompoundContext } from "../context/tableCompoundContext";
+import type { UserRow } from "../../../types/page.types";
 
-const Td = ({ row }: { row: any }) =>
-{
-    const { columns } = useTableCompoundContext();
-    return <>
-        {
-            columns.map(_col =>
-            {
-                if(row[_col] == null) return;
-                return <td key={_col}>
-                    <div key={row[_col]} 
-                        className="px-2" 
-                        style={{ padding: "5px", textAlign: "left" }}
-                    >
-                        {row[_col]}
-                    </div>
-                </td>
-            })
-        }
+type TdProps = {
+  row: UserRow;
+};
+
+const Td = ({ row }: TdProps) => {
+  const { columns } = useTableCompoundContext();
+
+  return (
+    <>
+      {columns.map((column) => {
+        const value = row[column as keyof UserRow];
+        if (value == null) return null;
+
+        return (
+          <td key={column}>
+            <div className="px-2" style={{ padding: "5px", textAlign: "left" }}>
+              {String(value)}
+            </div>
+          </td>
+        );
+      })}
     </>
-}
+  );
+};
 
 Td.displayName = "row-td";
-export default Td
+export default Td;

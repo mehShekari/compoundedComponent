@@ -1,61 +1,62 @@
-import { useState, useContext, createContext, SetStateAction } from "react";
+import { useMemo, useState } from "react";
 
 import PageCompoundHeader from "./components/header";
 import PageCompoundBody from "./components/body";
 import PageCompoundFooter from "./components/footer";
+import { PageCompoundContext } from "./context/pageCompoundContext";
+import { TableDataContext } from "../tableCompound/context/tableDataContext";
 import useFilterNodeChildren from "../../hooks/useFilterNodeChildren";
 import ErrorBoundary from "../../utils/errorBoundary";
 import FallBack from "../../utils/fallback";
+import { DEFAULT_USER_DATA } from "../../constants/defaultTableConfig";
+import type { UserRow } from "../../types/page.types";
 
-/**
- * * PAGE_COMPOUND 
-*/
+export { usePageCompoundContext } from "./context/pageCompoundContext";
 
-const PageCompoundContext = createContext({} as {
-    data: {name: string, age: number}[],
-    setData: React.Dispatch<SetStateAction<any>>
-    getTest: (e: string) => void
-});
-export function usePageCompoundContext()
-{
-    return useContext(PageCompoundContext)
-}
+const PAGE_COMPOUND_DEFAULT_SLOTS = [
+  <PageCompoundHeader key="header" />,
+  <PageCompoundBody key="body" />,
+  <PageCompoundFooter key="footer" />,
+];
 
-function PageCompound({ children }: { children?: React.ReactNode }){
-    const [data, setData] = useState([{ name: "ali", age: 22 }, { name: "javad", age: 12 }, { name: "aydin", age: 38 }])
+type PageCompoundProps = {
+  children?: React.ReactNode;
+  initialData?: UserRow[];
+};
 
-    const getTest = (e: string) =>
-    {
-        console.log(e)
-    }
+function PageCompound({ children, initialData = [...DEFAULT_USER_DATA] }: PageCompoundProps) {
+  const [data, setData] = useState<UserRow[]>(initialData);
 
-    const { FinalChildren } = useFilterNodeChildren({
-        children,
-        checkDisplayName: "compound-page-",
-        defaultsDisplayNames:  ['header', 'body', 'footer'],
-        defaultComponents:  [
-            <PageCompoundHeader key={"header"} />,
-            <PageCompoundBody key={"body"} />,
-            <PageCompoundFooter key={"footer"} />,
-        ]
-    })
+  const pageContextValue = useMemo(
+    () => ({ data, setData }),
+    [data, setData],
+  );
 
-    return <ErrorBoundary fallBack={(message) => {
-        return <FallBack message={message} />
-    }}>
-        <PageCompoundContext.Provider value={{
-            data, setData,
-            getTest
-        }}>
-            {/* {CustomChildren} */}
-            {FinalChildren}
-        </PageCompoundContext.Provider>
-    </ErrorBoundary> 
-    
+  const tableDataValue = useMemo(
+    () => ({ data, setData }),
+    [data, setData],
+  );
+
+  const { finalChildren } = useFilterNodeChildren({
+    children,
+    checkDisplayName: "compound-page-",
+    defaultsDisplayNames: ["header", "body", "footer"],
+    defaultComponents: PAGE_COMPOUND_DEFAULT_SLOTS,
+  });
+
+  return (
+    <ErrorBoundary fallBack={(message) => <FallBack message={message} />}>
+      <PageCompoundContext.Provider value={pageContextValue}>
+        <TableDataContext.Provider value={tableDataValue}>
+          {finalChildren}
+        </TableDataContext.Provider>
+      </PageCompoundContext.Provider>
+    </ErrorBoundary>
+  );
 }
 
 PageCompound.Header = PageCompoundHeader;
 PageCompound.Body = PageCompoundBody;
 PageCompound.Footer = PageCompoundFooter;
 
-export default PageCompound
+export default PageCompound;
