@@ -1,6 +1,6 @@
 import TableCompoundActions from "./actions";
 import Td from "./td";
-import type { UserRow } from "../../../types/page.types";
+import type { UserRow } from "../../types/page.types";
 
 type RowWithData = {
   children?: never;

@@ -1,3 +1,4 @@
+import React, { JSX } from 'react'
 import { describe, expect, it, vi } from "vitest";
 
 import PageCompoundHeader from "../components/pageCompound/components/header";

@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { TableDataContextValue } from "../../../types/page.types";
+import type { TableDataContextValue } from "../../types/page.types";
 
 export const TableDataContext = createContext<TableDataContextValue | null>(null);
 

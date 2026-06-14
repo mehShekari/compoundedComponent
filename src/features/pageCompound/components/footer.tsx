@@ -1,4 +1,4 @@
-import { COMPOUND_BORDER_STYLE } from "../../../constants/defaultTableConfig";
+import { COMPOUND_BORDER_STYLE } from "../../constants/defaultTableConfig";
 
 const PageCompoundFooter = () => (
   <div

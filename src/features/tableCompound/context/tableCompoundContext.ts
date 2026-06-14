@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { TableCompoundContextValue } from "../../../types/table.types";
+import type { TableCompoundContextValue } from "../../types/table.types";
 
 export const TableCompoundContext = createContext<TableCompoundContextValue | null>(null);
 

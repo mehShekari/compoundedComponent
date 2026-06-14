@@ -1,5 +1,5 @@
 import { useTableCompoundContext } from "../context/tableCompoundContext";
-import type { UserRow } from "../../../types/page.types";
+import type { UserRow } from "../../types/page.types";
 
 type TdProps = {
   row: UserRow;

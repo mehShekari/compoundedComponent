@@ -1,8 +1,8 @@
-import useFilterNodeChildren from "../../../hooks/useFilterNodeChildren";
+import useFilterNodeChildren from "../../hooks/useFilterNodeChildren";
 import Actions from "./actions";
 import MultiSearch from "./multiSearch";
 import SingleSearch from "./singleSearch";
-import { COMPOUND_BORDER_STYLE } from "../../../constants/defaultTableConfig";
+import { COMPOUND_BORDER_STYLE } from "../../constants/defaultTableConfig";
 
 const HEADER_DEFAULT_SLOTS = [
   <MultiSearch key="multiSearch" />,

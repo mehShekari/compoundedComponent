@@ -4,7 +4,7 @@ import { DeleteComponent } from "./btns/delete";
 import { EditComponent } from "./btns/edit";
 import { DetailComponent } from "./btns/detail";
 import { useTableData } from "../context/tableDataContext";
-import type { UserRow } from "../../../types/page.types";
+import type { UserRow } from "../../types/page.types";
 
 type TableCompoundActionsContextValue = {
   deleteHandler: (row: UserRow, event?: React.MouseEvent<HTMLElement>) => void;

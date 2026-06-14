@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { PageCompoundContextValue } from "../../../types/page.types";
+import type { PageCompoundContextValue } from "../../types/page.types";
 
 export const PageCompoundContext = createContext<PageCompoundContextValue | null>(null);
 

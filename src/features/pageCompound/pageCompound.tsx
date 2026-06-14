@@ -5,11 +5,11 @@ import PageCompoundBody from "./components/body";
 import PageCompoundFooter from "./components/footer";
 import { PageCompoundContext } from "./context/pageCompoundContext";
 import { TableDataContext } from "../tableCompound/context/tableDataContext";
-import useFilterNodeChildren from "../../hooks/useFilterNodeChildren";
-import ErrorBoundary from "../../utils/errorBoundary";
-import FallBack from "../../utils/fallback";
-import { DEFAULT_USER_DATA } from "../../constants/defaultTableConfig";
-import type { UserRow } from "../../types/page.types";
+import useFilterNodeChildren from "../hooks/useFilterNodeChildren";
+import ErrorBoundary from "../utils/errorBoundary";
+import FallBack from "../utils/fallback";
+import { DEFAULT_USER_DATA } from "../constants/defaultTableConfig";
+import type { UserRow } from "../types/page.types";
 
 export { usePageCompoundContext } from "./context/pageCompoundContext";
 

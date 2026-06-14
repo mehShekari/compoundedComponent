@@ -1,8 +1,8 @@
 import TableCompoundActions from "./actions";
 import TableCompoundRow from "./row";
 import { useTableData } from "../context/tableDataContext";
-import type { UserRow } from "../../../types/page.types";
-import type { TableRowFilter } from "../../../types/table.types";
+import type { UserRow } from "../../types/page.types";
+import type { TableRowFilter } from "../../types/table.types";
 
 type TableBodyRenderProps = {
   item: UserRow;

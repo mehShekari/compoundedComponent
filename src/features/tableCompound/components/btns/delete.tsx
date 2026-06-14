@@ -1,5 +1,5 @@
 import { useTableCompoundActionContext } from "../actions";
-import type { UserRow } from "../../../../types/page.types";
+import type { UserRow } from "../../../types/page.types";
 
 type DeleteComponentProps = {
   onClick?: (row: UserRow) => void;

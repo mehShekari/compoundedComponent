@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
 import TableCompound from "../../tableCompound/tableCompound";
-import { DEFAULT_USER_TABLE } from "../../../constants/defaultTableConfig";
+import { DEFAULT_USER_TABLE } from "../../constants/defaultTableConfig";
 
 type BodyPageCompoundContextValue = {
   bodyState1: string;

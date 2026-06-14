@@ -1,6 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import '@testing-library/jest-dom/vitest'
+
 import { describe, expect, it, vi } from "vitest";
 
 import TableCompound, { TableDataContext } from "./tableCompound";
